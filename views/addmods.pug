@@ -1,0 +1,20 @@
+extends layout
+
+block content
+  h1= title
+  p Rows: #{query.rows}
+  p Columns: #{query.cols}
+  - var rows =  Number(query.rows);
+  - var col =  Number(query.cols);
+  if (!Number.isInteger(rows)) || (!Number.isInteger(col))
+    p Not an integer 
+  else if (rows < 1 || rows > 6) || (col < 1 || col > 6)
+     p Out of Range
+  else 
+    table(id="outer")
+      - for(let i=0; i< rows; i++) {
+          tr(id="middle")
+            - for(let j=0; j< col; j++) {
+                td  #{(i+j) % rows} 
+            - }
+      - }

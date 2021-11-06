@@ -1,0 +1,16 @@
+extends layout
+
+block content
+  h1= title
+  p Welcome to #{title}. Hi
+  button Press me
+  button(type="button", class="btn btn-secondary", onclick="update()") Left
+  div(id="target") Display
+
+  script. 
+    let client_count= 0
+    function update() {
+      client_count = client_count + 1
+      document.getElementById('target').innerText = `Value now ${client_count}`
+    }
+        
