@@ -1,0 +1,17 @@
+extends layout
+
+block content
+    h1= title
+    - var list = results 
+    table(class="table table-stripped table-bordered")
+        thead 
+            tr 
+                td Costume Type
+                td Size 
+                td Cost 
+        tbody 
+            each item in list 
+                tr
+                    td #{item.costume_type}
+                    td #{item.size}
+                    td #{item.cost}
