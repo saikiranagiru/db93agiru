@@ -1,0 +1,47 @@
+extends layout 
+ 
+block content 
+ h1= title 
+ if (toShow == null) 
+    h2 No instance to delete 
+ else 
+    - let costumeid = toShow._id 
+    - let costume_type = toShow.costume_type 
+    - let costumecost = toShow.cost 
+    - let costumesize = toShow.size 
+   
+    div.row(class='mb-2') 
+        div.mr-1 ID is 
+        div #{costumeid} 
+    - let actionid = "/resource/costumes/" + costumeid 
+    form(id='CostumeForm', action= actionid, method="PUT") 
+        div.form-group 
+            label.costumeAttr(for='costume_type') Costume type 
+            input#costume_type(type='text', name='costume_type', value= costume_type ) 
+        div.form-group 
+            label.costumeAttr(for='size') Costume size 
+            input#size(type='text', name='size', value= costumesize ) 
+        div.form-group 
+            label.costumeAttr(for='cost') Costume cost 
+            input#cost(type='number', name='cost', value= costumecost ) 
+        input(type="submit") 
+    
+    script. 
+        document.forms['CostumeForm'].addEventListener('submit', (event) => { 
+        event.preventDefault(); 
+        // TODO do something here to show user that form is being submitted 
+        fetch(event.target.action, { 
+            method: 'PUT', 
+            body: new URLSearchParams(new FormData(event.target)) // event.target is the form 
+        }).then((resp) => { 
+            return resp.json(); // or resp.text() or whatever the server sends 
+        }).then((body) => { 
+            alert("Update succeded") ;
+        window.location.href='/comic' 
+
+            // TODO handle body 
+        }).catch((error) => { 
+            // TODO handle error 
+            alert("Update failed " + error ) 
+        }); 
+        }); 

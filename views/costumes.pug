@@ -3,15 +3,24 @@ extends layout
 block content
     h1= title
     - var list = results 
+    div 
+        a(class="btn btn-success", style="margin-right:5px", href=`/comic/create`) Add New Costume
+
     table(class="table table-stripped table-bordered")
         thead 
             tr 
                 td Costume Type
                 td Size 
-                td Cost 
+                td Cost
+                td Action
         tbody 
             each item in list 
                 tr
                     td #{item.costume_type}
                     td #{item.size}
                     td #{item.cost}
+                    td 
+                        div(class="d-flex justify-content-center")
+                            a(class="btn btn-info", style="margin-right:5px", href=`/comic/detail?id=${item.id}`) Details
+                            a(class="btn btn-warning", style="margin-right:5px", href=`/comic/update?id=${item.id}`) Edit 
+                            a(class="btn btn-dark", style="margin-right:5px", href=`/comic/delete?id=${item.id}`) Delete
