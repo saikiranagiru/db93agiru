@@ -8,7 +8,9 @@ exports.costume_list = async function(req, res) {
     } 
     catch(err){ 
         res.status(500); 
-        res.send(`{"error": ${err}}`); 
+        let error = JSON.stringify({error: err._message})
+        console.log(error)
+        res.send(error); 
     }  
 }; 
  

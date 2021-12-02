@@ -11,25 +11,15 @@ var addmodsRouter = require('./routes/addmods');
 var selectorRouter = require('./routes/selector');
 var resourceRouter = require('./routes/resource')
 var comicRouter = require('./routes/comic')
+var Account = require('./models/account'); 
+
 
 
 var Costume = require("./models/costume");
 var app = express();
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
-passport.use(new LocalStrategy(
-  function (username, password, done) {
-    Account.findOne({ username: username }, function (err, user) {
-      if (err) { return done(err); }
-      if (!user) {
-        return done(null, false, { message: 'Incorrect username.' });
-      }
-      if (!user.validPassword(password)) {
-        return done(null, false, { message: 'Incorrect password.' });
-      }
-      return done(null, user);
-    });
-  }))
+
 const connectionString = process.env.MONGO_CON;
 mongoose = require('mongoose');
 mongoose.connect(connectionString, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -73,7 +63,7 @@ app.use('/comic', comicRouter)
 // passport config 
 // Use the existing connection 
 // The Account model  
-var Account =require('./models/account')); 
+var Account =require('./models/account'); 
  
 passport.use(new LocalStrategy(Account.authenticate())); 
 passport.serializeUser(Account.serializeUser()); 
@@ -96,6 +86,31 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+passport.use(new LocalStrategy( 
+  function(username, password, done) { 
+    Account.findOne({ username: username }, function (err, user) { 
+      if (err) { return done(err); } 
+      if (!user) { 
+        return done(null, false, { message: 'Incorrect username.' }); 
+      } 
+      console.log(user)
+      if ( user.validPassword && !user.validPassword(password)) { 
+        return done(null, false, { message: 'Incorrect password.' }); 
+      } 
+      return done(null, user); 
+    }); 
+  }))
+
+  passport.serializeUser(function(user, done) {
+    done(null, user.id);
+  });
+
+  passport.deserializeUser(function(id, done) {
+    Account.findById(id, function(err, user) {
+      done(err, user);
+    });
+  });
+
 
 module.exports = app;
 
@@ -105,15 +120,15 @@ async function recreateDB() {
 
   let instance1 = new Costume({
     costume_type: "ghost", size: 'large',
-    cost: 25.4
+    cost: 125.4
   });
   let instance2 = new Costume({
     costume_type: "hulk", size: 'medium',
-    cost: 49.5
+    cost: 149.5
   });
   let instance3 = new Costume({
     costume_type: "superman", size: 'small',
-    cost: 45.9
+    cost: 145.9
   });
   instance1.save(function (err, doc) {
     if (err) return console.error(err);

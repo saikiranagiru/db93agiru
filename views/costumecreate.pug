@@ -6,13 +6,13 @@ block content
   form(id='CostumeForm', action="/resource/costumes", method="POST") 
     div.form-group 
         label.costumeAttr(for='costume_type') Costume type 
-        input#costume_type(type='text', name='costume_type') 
+        input#costume_type(type='text', name='costume_type',maxlength="25",minlength="2") 
     div.form-group 
         label.costumeAttr(for='size') Costume size 
         input#size(type='text', name='size') 
     div.form-group 
         label.costumeAttr(for='cost') Costume cost 
-        input#cost(type='number', name='cost') 
+        input#cost(type='number', name='cost', max="500",min="1") 
     input(type="submit") 
  
   script. 
@@ -25,6 +25,9 @@ block content
       }).then((resp) => { 
         return resp.json(); // or resp.text() or whatever the server sends 
       }).then((body) => { 
+        if(body.error) {
+         return alert(body.error)
+        }
         alert("Save succeded");
       window.location.href='/comic' 
 
